@@ -2,9 +2,11 @@ import uvicorn
 from fastapi import FastAPI
 
 from horreum.common.config import get_config
+from horreum.router import terraform
 
 
 app = FastAPI()
+app.include_router(terraform.router, prefix="/terraform")
 
 
 if __name__ == "__main__":
