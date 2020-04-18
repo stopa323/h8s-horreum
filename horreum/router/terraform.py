@@ -1,16 +1,17 @@
 from fastapi import APIRouter
 from typing import List
 
-from horreum.obj import terraform
+from horreum.schema import terraform
+from horreum.provider import terraform as provider
 
 
 router = APIRouter()
 
 
-@router.get("/objects",
-            name="Get Terraform objects",
-            description="Fetch all supported Terraform objects.",
-            response_model=List[terraform.GenericObject])
-async def get_objects():
-    items = []
-    return items
+@router.get("/resources",
+            name="List Terraform resources",
+            description="Fetch list of all supported Terraform resources",
+            response_model=List[terraform.Resource])
+async def list_resources():
+    objects = provider.list_resources()
+    return objects
