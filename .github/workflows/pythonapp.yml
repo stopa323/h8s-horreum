@@ -21,6 +21,6 @@ jobs:
       with:
         python-version: 3.6
     - name: Install tox
-      run: apt install tox
+      run: pip install tox
     - name: Run tox
       run: tox
