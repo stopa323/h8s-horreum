@@ -8,7 +8,7 @@ from horreum.router import terraform
 
 
 app = FastAPI()
-app.include_router(terraform.router, prefix="/terraform")
+app.include_router(terraform.router, prefix="/v1/terraform")
 
 
 @app.on_event("startup")
