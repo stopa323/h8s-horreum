@@ -20,5 +20,7 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: 3.6
+    - name: Install tox
+      run: apt install tox
     - name: Run tox
       run: tox
