@@ -1,3 +1,4 @@
+# type: ignore
 from fastapi import APIRouter
 
 from horreum.schema import node as api

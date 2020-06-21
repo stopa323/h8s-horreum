@@ -1,0 +1,14 @@
+dist: xenial
+
+language: python
+
+cache: pip
+
+python:
+    - "3.6"
+
+install:
+    - pip install -r requirements-dev.txt
+
+script:
+    - bash scripts/test.sh
