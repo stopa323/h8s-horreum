@@ -4,11 +4,11 @@ from fastapi import FastAPI
 from mongoengine import connect, disconnect
 
 from horreum.common.config import get_config
-from horreum.router import terraform
+from horreum.router import node
 
 
 app = FastAPI()
-app.include_router(terraform.router, prefix="/v1/terraform")
+app.include_router(node.router, prefix="/v1/terraform")
 
 
 @app.on_event("startup")
