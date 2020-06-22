@@ -26,7 +26,7 @@ def fetch_nodes(mock_database):
 @pytest.fixture(scope="class")
 def db_inject_node(mock_database):
     NodeTemplateObj(name="name1", description="desc1", automoton="_CORE",
-                    keywords=[], ingress_ports=[], egress_ports=[]).save()
+                    keywords=[], ingressPorts=[], egressPorts=[]).save()
 
 
 client = TestClient(app)

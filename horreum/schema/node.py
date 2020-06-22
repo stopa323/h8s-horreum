@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import List
+from typing import List, Optional
 
 # Todo: Improve Resources documentation
 
@@ -9,9 +9,11 @@ class PortTemplate(BaseModel):
                       title="Port name")
     kind: str = Field(...,
                       title="Port kind")
-    default_value: str = Field(...,
-                               title="Default value assigned to port",
-                               alias="defaultValue")
+    hasDefault: Optional[bool] = Field(False,
+                                       title="Whether port has default value. "
+                                             "Defaults to False")
+    defaultValue: Optional[str] = Field(None,
+                                        title="Default value")
 
     class Config:
         orm_mode = True
@@ -39,10 +41,10 @@ class NodeTemplateCreate(BaseModel):
     keywords: List[str] = Field([],
                                 title="Collection of associated keywords, used"
                                       "for searching")
-    ingress_ports: List[PortTemplate] = Field(
-        [], title="Ordered collection of ingress ports", alias="ingressPorts")
-    egress_ports: List[PortTemplate] = Field(
-        [], title="Ordered collection of egress ports", alias="egressPorts")
+    ingressPorts: List[PortTemplate] = Field(
+        [], title="Ordered collection of ingress ports")
+    egressPorts: List[PortTemplate] = Field(
+        [], title="Ordered collection of egress ports")
 
     class Config:
         orm_mode = True
@@ -63,3 +65,6 @@ class NodeTemplate(NodeTemplateCreate):
 class NodeTemplateListResponse(BaseModel):
     items: List[NodeTemplate] = Field(...,
                                       title="List of matched node templates")
+
+    class Config:
+        orm_mode = True
