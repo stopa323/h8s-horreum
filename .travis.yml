@@ -19,7 +19,4 @@ jobs:
       script: bash scripts/test.sh
 
     - stage: Build image
-      script: skip
-      deploy:
-        provider: script
-        script: bash scripts/build.sh
+      script: bash scripts/build.sh
