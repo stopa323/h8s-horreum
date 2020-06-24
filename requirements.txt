@@ -1,2 +1,5 @@
-fastapi[all]==0.58.0
+fastapi==0.58.0
 mongoengine==0.19.1
+pyyaml==5.3.1
+requests==2.24.0
+uvicorn==0.11.5
