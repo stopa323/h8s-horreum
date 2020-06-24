@@ -5,10 +5,18 @@ language: python
 cache: pip
 
 python:
-    - "3.6"
+  - "3.6"
 
-install:
-    - pip install -r requirements-dev.txt
+services:
+  - docker
 
-script:
-    - bash scripts/test.sh
+jobs:
+  include:
+    - stage: Tests
+      script: bash scripts/test.sh
+
+    - stage: Build image
+      script: skip
+      deploy:
+        provider: script
+        script: bash scripts/build.sh
