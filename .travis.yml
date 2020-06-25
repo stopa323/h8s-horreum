@@ -4,6 +4,14 @@ language: python
 
 cache: pip
 
+notifications:
+  email: false
+  slack:
+    rooms:
+      secure: ZeTzNyFmKzYWQE9ZYgJ3Txq93Y8NulMXCGVT0J+AfNF0tUjw0GwdESfJ3ORngyS/aqKsFaHf3i1qHPTldOx6E0xluDYcnKADXfMbKrx+IsxwMCKbkkKq764TBUol6WqOd/uljcnpaapl2JqQh8d3Ff/KkIj/bTe4BmBodtVX0CQZVrIsIsohwVhPt+f8rMRGoVN0ObvmyOtaE3qILik3i1NNfv3t6PAinQAXvnqPbDNT/35h1jgSXjmcEpyPOUNo/yuh2cNyeEkrwVklwBbz5hM8agHQzjN+1cpzrjzrFmyF9hohmFJyL71et/52r8Wn/EAWgraqjsJ5VgsXyZYcCr5OkJMr5sCjO/YaroLM1kds2nDyDoP0uYQlRLHj1oWKxP9iG+v6b0OO+zfgnloAntXE9Z/m+JhzOZOVNCJq9B6VFqf1+WDziRsgH2tTYPjflN7YZsZbG4LzswSxz6+Itdd/qDdCtfl2oi24+Xw0uTeN4HvWtKgqTiILhPLretOq5lR9cGvOXvhABI755g34IWstKJB0FsMl57bS1ThTEtTGLqFJPw03lGAYoXPNn2t4zlw4+oFfnqwcm1fJ/OkT644xVBzktC4hDACjVR2BNQfDvnr58A6ZLE+9qIdDoUjSiz/VJh76G2n1X6h4kdnk/RwWnW6Tr/au0GpUNRerGwg=
+    on_success: always
+    on_failure: always
+    
 python:
   - "3.6"
 
