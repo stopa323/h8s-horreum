@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 set -e
 
-IMAGE_TAG=""
-
-if [ "$IMAGE_TAG" == "" ] ; then
-    IMAGE_TAG="build-test"
+if [[ -z "$IMAGE_TAG" ]] ; then
+    echo "No tag provided. Assigning latest."
+    IMAGE_TAG="latest"
 fi
 
-docker build -t "h8s-horreum:$IMAGE_TAG" --file "./docker/Dockerfile" .
+IMAGE_NAME_TAG="stopa323/h8s-horreum:$IMAGE_TAG"
+
+docker build -t "$IMAGE_NAME_TAG" --file "./docker/Dockerfile" .
