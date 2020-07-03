@@ -2,7 +2,15 @@
 
 name: Build
 
-on: [push, pull_request]
+on:
+  push:
+    branches-ignore:
+      - master
+      - stage
+  pull_request:
+    branches:
+      - master
+      - stage
 
 jobs:
   createSlackMessage:
