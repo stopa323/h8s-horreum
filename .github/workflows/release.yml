@@ -1,0 +1,89 @@
+name: Create Release
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions-ecosystem/action-get-merged-pull-request@v1
+        id: get-merged-pull-request
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions-ecosystem/action-release-label@v1
+        id: release-label
+        if: ${{ steps.get-merged-pull-request.outputs.title != null }}
+        with:
+          labels: ${{ steps.get-merged-pull-request.outputs.labels }}
+
+      - uses: actions-ecosystem/action-get-latest-tag@v1
+        id: get-latest-tag
+        if: ${{ steps.release-label.outputs.level != null }}
+        with:
+          semver_only: true
+
+      - uses: actions-ecosystem/action-bump-semver@v1
+        id: bump-semver
+        if: ${{ steps.release-label.outputs.level != null }}
+        with:
+          current_version: ${{ steps.get-latest-tag.outputs.tag }}
+          level: ${{ steps.release-label.outputs.level }}
+
+      - uses: actions-ecosystem/action-push-tag@v1
+        if: ${{ steps.bump-semver.outputs.new_version != null }}
+        with:
+          tag: ${{ steps.bump-semver.outputs.new_version }}
+          message: "${{ steps.bump-semver.outputs.new_version }}: PR #${{ steps.get-merged-pull-request.outputs.number }} ${{ steps.get-merged-pull-request.outputs.title }}"
+
+      - name: Build & push Docker image
+        if: ${{ steps.bump-semver.outputs.new_version != null }}
+        run: |
+          bash scripts/build-push.sh
+        env:
+          IMAGE_TAG: ${{ steps.bump-semver.outputs.new_version }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Generate changelog
+        if: ${{ steps.bump-semver.outputs.new_version != null }}
+        uses: heinrichreimer/github-changelog-generator-action@v2.1.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          sinceTag: ${{ steps.get-latest-tag.outputs.tag }}
+          # Exclude PRs from Changelog
+          pullRequests: false
+          verbose: true
+          issues: true
+          issuesWoLabels: false
+          prWoLabels: false
+          # Todo: Check out issue #35
+          # headerLabel: '# Release notes'
+          enhancementLabel: "**Improvements:**"
+          bugLabels: ":pig:bug"
+          enhancementLabels: ":hammer_and_wrench:improvement"
+          addSections: '{"features":{"prefix":"**Features**","labels":[":moneybag:feature"]}}'
+
+      - name: Read CHANGELOG to env variable
+        if: ${{ steps.bump-semver.outputs.new_version != null }}
+        run: |
+          cl=$(cat /home/runner/work/h8s-horreum/h8s-horreum/CHANGELOG.md)
+          echo $cl
+          cl="${cl//'%'/'%25'}"
+          cl="${cl//$'\n'/'%0A'}"
+          cl="${cl//$'\r'/'%0D'}"
+          echo "::set-env name=CL::$cl"
+
+      - uses: actions/create-release@v1
+        if: ${{ steps.bump-semver.outputs.new_version != null }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.bump-semver.outputs.new_version }}
+          release_name: ${{ steps.bump-semver.outputs.new_version }}
+          body: ${{ env.CL }}
