@@ -41,6 +41,15 @@ jobs:
           tag: ${{ steps.bump-semver.outputs.new_version }}
           message: "${{ steps.bump-semver.outputs.new_version }}: PR #${{ steps.get-merged-pull-request.outputs.number }} ${{ steps.get-merged-pull-request.outputs.title }}"
 
+      - name: Build & push Docker image
+        if: ${{ steps.bump-semver.outputs.new_version != null }}
+        run: |
+          bash scripts/build-push.sh
+        env:
+          IMAGE_TAG: ${{ steps.bump-semver.outputs.new_version }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Generate changelog
         if: ${{ steps.bump-semver.outputs.new_version != null }}
         uses: heinrichreimer/github-changelog-generator-action@v2.1.1
