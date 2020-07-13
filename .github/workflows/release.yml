@@ -67,7 +67,7 @@ jobs:
           enhancementLabel: "**Improvements:**"
           bugLabels: ":pig:bug"
           enhancementLabels: ":hammer_and_wrench:improvement"
-          addSections: '{"features":{"prefix":"**Features**","labels":[":moneybag:feature"]}}'
+          addSections: '{"features":{"prefix":"**Features**","labels":[":moneybag:feature"]},"cicd":{"prefix":"**CI/CD**","labels":[":articulated_lorry:ci/cd"]}}'
 
       - name: Read CHANGELOG to env variable
         if: ${{ steps.bump-semver.outputs.new_version != null }}
