@@ -1,4 +1,4 @@
-FROM tiangolo/uvicorn-gunicorn:python3.6-alpine3.8
+FROM tiangolo/uvicorn-gunicorn:python3.8-alpine3.10
 
 COPY requirements.txt /tmp/
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
