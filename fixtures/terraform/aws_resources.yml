@@ -1,47 +1,32 @@
 ---
-name: Create VPC
+name: aws_vpc
 description: Provides AWS VPC resource
-automoton: TERRAFORM
-ingressPorts:
-  - name: Entry
-    kind: EXEC
-  - name: Name
-    kind: STRING
-    hasDefault: true
-    defaultValue: MyFirstVPC
-  - name: CIDR
-    kind: STRING
-    hasDefault: true
-    defaultValue: 10.0.0.0/16
-egressPorts:
-  - name: Exit
-    kind: EXEC
-  - name: VPC
-    kind: OBJECT
-keywords:
-  - aws
-  - cloud
-  - vpc
+attributes:
+  - name: cidr_block
+    description: The CIDR block for the VPC.
+    type: String
+    isArgument: True
+    isRequired: True
+  - name: id
+    description: The ID of the VPC.
+    type: String
+    isArgument: False
 
 ---
-name: Create Subnet
-description: Provides AWS Subnet resource
-automoton: TERRAFORM
-ingressPorts:
-  - name: Entry
-    kind: EXEC
-  - name: VPC
-    kind: OBJECT
-  - name: CIDR
-    kind: STRING
-    hasDefault: true
-    defaultValue: 10.0.0.0/24
-egressPorts:
-  - name: Exit
-    kind: EXEC
-  - name: Subnet
-    kind: OBJECT
-keywords:
-  - aws
-  - cloud
-  - subnet
+name: aws_subnet
+description: Provides an VPC subnet resource.
+attributes:
+  - name: cidr_block
+    description: The CIDR block for the subnet.
+    type: String
+    isArgument: True
+    isRequired: True
+  - name: vpc_id
+    description: The VPC ID.
+    type: String
+    isArgument: True
+    isRequired: True
+  - name: id
+    description: The ID of the subnet.
+    type: String
+    isArgument: False

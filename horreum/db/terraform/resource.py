@@ -44,8 +44,8 @@ class _ResourceAttribute(MapAttribute):
     name = UnicodeAttribute(null=False)
     description = UnicodeAttribute(null=True)
     type = UnicodeAttribute(null=False)
-    is_argument = BooleanAttribute(null=False, default=False)
-    is_required = BooleanAttribute(null=False, default=False)
+    is_argument = BooleanAttribute(null=False)
+    is_required = BooleanAttribute(null=False)
 
 
 class ResourceTemplateDB(SerializableModel):

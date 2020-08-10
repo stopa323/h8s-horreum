@@ -3,16 +3,31 @@ from typing import List, Optional
 
 
 class ResourceAttribute(BaseModel):
-    name: str = Field(..., title="Attribute name.", min_length=3, max_length=64)
+    name: str = Field(
+        ...,
+        title="Attribute name.",
+        min_length=2,
+        max_length=64)
     description: Optional[str] = Field(
-        None, title="Brief description of the attribute.", min_length=0,
+        None,
+        title="Brief description of the attribute.",
+        min_length=0,
         max_length=200)
-    type: str = Field(..., title="Attribute type.", min_length=3, max_length=32)
-    is_argument: bool = Field(False, title="Whether attribute can be used as "
-                                           "resource argument.",
-                              alias="isArgument")
-    is_required: bool = Field(False, title="Whether argument is required.",
-                              alias="isRequired")
+    type: str = Field(
+        ...,
+        title="Attribute type.",
+        min_length=3,
+        max_length=32)
+    is_argument: bool = Field(
+        False,
+        title="When set to true, indicates that this attribute is used as input"
+              " for resource configuration. Note that every attribute can be "
+              "referenced as output.",
+        alias="isArgument")
+    is_required: bool = Field(
+        False, title="When set to true, indicates that input value for this "
+                     "attribute must be provided.",
+        alias="isRequired")
 
     class Config:
         allow_population_by_field_name = True

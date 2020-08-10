@@ -51,7 +51,7 @@ def test_query_populated_db(single_item_db):
                 "description": single_item_db.attributes[0].description,
                 "type": single_item_db.attributes[0].type,
                 "isArgument": single_item_db.attributes[0].is_argument,
-                "isRequired": single_item_db.attributes[0].is_required
+                "isRequired": single_item_db.attributes[0].is_required,
             }]}]}
 
     response = client.get(GET_PATH)
@@ -81,7 +81,7 @@ def test_boto_client_error_on_get(mocker):
 PUT_REQ_BODY = {
     "description": "AWS VPC.",
     "attributes": [{
-        "name": "cidr",
+        "name": "cidr_block",
         "description": "VPC CIDR.",
         "type": "String",
         "isArgument": True,
