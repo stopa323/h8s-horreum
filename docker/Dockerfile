@@ -8,4 +8,6 @@ COPY ./etc /app/etc
 COPY ./fixtures /app/fixtures
 
 WORKDIR /app/horreum
-CMD ["uvicorn", "main:app"]
+
+ENTRYPOINT ["uvicorn", "main:app"]
+CMD ["--host", "0.0.0.0", "--port", "8000"]

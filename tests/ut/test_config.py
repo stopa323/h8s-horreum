@@ -2,6 +2,7 @@ import configparser
 import pytest
 
 from pytest_mock import mocker
+from unittest.mock import MagicMock
 
 from horreum.common import config
 
@@ -24,6 +25,17 @@ def test_config_is_loaded_when_none(mocker):
 
     assert 1 == current_config.read.call_count
     assert "../etc/config.ini" == current_config.read.call_args[0][0]
+
+
+def test_exception_raised_on_invalid_config_path(mocker):
+    mocker.patch.object(config, "CONF", None)
+    m_cfg = MagicMock()
+    m_cfg.read.return_value = []
+    m_cfg_cls = mocker.patch.object(config.configparser, "ConfigParser")
+    m_cfg_cls.return_value = m_cfg
+
+    with pytest.raises(OSError):
+        config.get_config()
 
 
 @pytest.fixture()
@@ -50,12 +62,12 @@ def env_mock(request, monkeypatch):
          {"env": "APP_BIND_HOST", "val": "1.1.1.1"}),
         ({"section": "app", "key": "bind_port", "val": "5000"},
          {"env": "APP_BIND_PORT", "val": "5001"}),
-        ({"section": "dynamodb", "key": "local_url", "val": ""},
-         {"env": "DYNAMODB_LOCAL_URL", "val": "http://localhost:8000"})
+        ({"section": "dynamodb", "key": "endpoint_url", "val": ""},
+         {"env": "DYNAMODB_ENDPOINT_URL", "val": "http://localhost:8000"})
     ],
     indirect=["cfg_stub", "env_mock"]
 )
-def test_override_app_bind_host(cfg_stub, env_mock):
+def test_override_app_config_default(cfg_stub, env_mock):
     cfg, section, key = cfg_stub
 
     config.cfg_override_with_env(cfg)

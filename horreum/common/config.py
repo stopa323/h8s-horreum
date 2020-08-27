@@ -3,8 +3,9 @@ import logging
 
 from os import getenv
 
-LOG = logging.getLogger("main")
 CONF = None
+
+LOG = logging.getLogger("main")
 
 
 def get_config() -> configparser.ConfigParser:
@@ -12,7 +13,11 @@ def get_config() -> configparser.ConfigParser:
 
     if not CONF:
         CONF = configparser.ConfigParser()
-        CONF.read("../etc/config.ini")
+        cfg_filepath = "../etc/config.ini"
+        read_files = CONF.read(cfg_filepath)
+        if not read_files:
+            raise IOError(f"Failed to read {cfg_filepath}")
+
         cfg_override_with_env(CONF)
 
     return CONF
@@ -29,8 +34,8 @@ def cfg_override_with_env(cfg: configparser.ConfigParser) -> None:
     if bind_port := getenv("APP_BIND_PORT"):
         cfg.set("app", "bind_port", bind_port)
 
-    if dynamodb_url := getenv("DYNAMODB_LOCAL_URL"):
-        cfg.set("dynamodb", "local_url", dynamodb_url)
+    if dynamodb_endpoint_url := getenv("DYNAMODB_ENDPOINT_URL"):
+        cfg.set("dynamodb", "endpoint_url", dynamodb_endpoint_url)
 
 
 def print_config(cfg: configparser.ConfigParser) -> None:
@@ -40,4 +45,5 @@ def print_config(cfg: configparser.ConfigParser) -> None:
         msg_lines.append(f"[{_section}]")
         for _key, _val in cfg.items(_section):
             msg_lines.append(f"{_key} = {_val}")
+
     LOG.info("\n\t".join(msg_lines))
