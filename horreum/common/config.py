@@ -34,8 +34,11 @@ def cfg_override_with_env(cfg: configparser.ConfigParser) -> None:
     if bind_port := getenv("APP_BIND_PORT"):
         cfg.set("app", "bind_port", bind_port)
 
-    if dynamodb_endpoint_url := getenv("DYNAMODB_ENDPOINT_URL"):
-        cfg.set("dynamodb", "endpoint_url", dynamodb_endpoint_url)
+    if dynamodb_local_url := getenv("DYNAMODB_LOCAL_URL"):
+        cfg.set("dynamodb", "local_url", dynamodb_local_url)
+
+    if dynamodb_region := getenv("DYNAMODB_REGION"):
+        cfg.set("dynamodb", "region", dynamodb_region)
 
 
 def print_config(cfg: configparser.ConfigParser) -> None:

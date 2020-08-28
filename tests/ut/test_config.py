@@ -62,8 +62,10 @@ def env_mock(request, monkeypatch):
          {"env": "APP_BIND_HOST", "val": "1.1.1.1"}),
         ({"section": "app", "key": "bind_port", "val": "5000"},
          {"env": "APP_BIND_PORT", "val": "5001"}),
-        ({"section": "dynamodb", "key": "endpoint_url", "val": ""},
-         {"env": "DYNAMODB_ENDPOINT_URL", "val": "http://localhost:8000"})
+        ({"section": "dynamodb", "key": "local_url", "val": ""},
+         {"env": "DYNAMODB_LOCAL_URL", "val": "http://localhost:8000"}),
+        ({"section": "dynamodb", "key": "region", "val": "eu-west-1"},
+         {"env": "DYNAMODB_REGION", "val": "us-west-1"})
     ],
     indirect=["cfg_stub", "env_mock"]
 )

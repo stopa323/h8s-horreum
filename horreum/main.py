@@ -7,7 +7,7 @@ from horreum.api.router import terraform
 from horreum.api.schema.errors import inject_exception_handlers
 from horreum.common.config import get_config, print_config
 from horreum.common.log import set_up_logger
-from horreum.db.utils import inject_table_host
+from horreum.db.utils import configure_db
 
 app = FastAPI()
 app.include_router(prefix="/v1", router=terraform.router)
@@ -25,8 +25,7 @@ async def startup_event():
     cfg = get_config()
     print_config(cfg)
 
-    dynamodb_endpoint_url = cfg.get("dynamodb", "endpoint_url")
-    inject_table_host(dynamodb_endpoint_url)
+    configure_db(cfg)
 
 
 # Note: This code runs only locally. When using container version, bind_host and
