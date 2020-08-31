@@ -1,0 +1,7 @@
+**
+!docker/Dockerfile
+!etc
+!fixtures
+!horreum
+!scripts/toolbox.py
+!requirements.txt

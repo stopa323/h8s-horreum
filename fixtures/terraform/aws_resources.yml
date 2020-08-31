@@ -1,0 +1,32 @@
+---
+name: aws_vpc
+description: Provides AWS VPC resource
+attributes:
+  - name: cidr_block
+    description: The CIDR block for the VPC.
+    type: String
+    isArgument: True
+    isRequired: True
+  - name: id
+    description: The ID of the VPC.
+    type: String
+    isArgument: False
+
+---
+name: aws_subnet
+description: Provides an VPC subnet resource.
+attributes:
+  - name: cidr_block
+    description: The CIDR block for the subnet.
+    type: String
+    isArgument: True
+    isRequired: True
+  - name: vpc_id
+    description: The VPC ID.
+    type: String
+    isArgument: True
+    isRequired: True
+  - name: id
+    description: The ID of the subnet.
+    type: String
+    isArgument: False

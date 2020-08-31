@@ -1,44 +1,38 @@
 # type: ignore
-import uvicorn
+import logging
 
 from fastapi import FastAPI
-from mongoengine import connect, disconnect
-from os import getenv
 
-from horreum.common.config import get_config
-from horreum.common.utils import load_fixtures
-from horreum.router import node
+from horreum.api.router import terraform
+from horreum.api.schema.errors import inject_exception_handlers
+from horreum.common.config import get_config, print_config
+from horreum.common.log import set_up_logger
+from horreum.db.utils import configure_db
 
 app = FastAPI()
-app.include_router(node.router)
+app.include_router(prefix="/v1", router=terraform.router)
+
+inject_exception_handlers(app)
+
+LOG = logging.getLogger("main")
 
 
 @app.on_event("startup")
 async def startup_event():
+    set_up_logger()
+
+    # Todo: Test DynamoDB responsiveness here?
     cfg = get_config()
+    print_config(cfg)
 
-    db_connection_string = getenv("DB_CONNECTION", cfg.get("db", "connection"))
-    print(f"Using {db_connection_string} for database connection")
-    con = connect(db=cfg.get("db", "db_name"), host=db_connection_string)
-    con.server_info()
-    print("DB connection OK")
-
-    if getenv("APP_LOAD_FIXTURES", False):
-        load_fixtures(cfg.get("fixtures", "path"))
-
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    disconnect()
-    print("Disconnected from DB")
+    configure_db(cfg)
 
 
 # Note: This code runs only locally. When using container version, bind_host and
 #       bind_port are set using uvicorn parameters
 if __name__ == "__main__":
+    import uvicorn
     cfg = get_config()
     uvicorn.run(app,
-                host=getenv("APP_BIND_HOST",
-                            cfg.get("DEFAULT", "bind_host")),
-                port=getenv("APP_BIND_PORT",
-                            cfg.getint("DEFAULT", "bind_port")))
+                host=cfg.get("app", "bind_host"),
+                port=cfg.getint("app", "bind_port"))
